@@ -1,7 +1,9 @@
-selam arklar 
+colab_main dosyasını colabda kullanabilirsiniz. requirements ve wikidump verilerini sol taraftaki klasöre koymanız yeterli.
 
-colab_main dosyasını colabda kullanabilirsiniz diğeri pc içindi de hatalar olabilir
+dosya yolunu değiştirerek herhangi bir zip veya klasörün içindeki pdf,docx,txt gibi dosyaları okuyabiliyor.
 
-colabda çalıştırabilmek için script(bu örnek bir dosya) ve requirements kısmını colabın sol tarafındaki dosyalar kısmına sürüklemeniz yeterli şu an ki dosya yolu orayı gösteriyor
+chunking algoritmasının parametreleri değiştirilebilir.
 
-tensorflow ile ilgili bir hata alırsanız yorum satırında pip uninstall olan bir kod var onu çalıştırdığınızda düzelecektir büyük ihtimal
+tensorflow ile ilgili bir hata alırsanız yorum satırında pip uninstall olan bir kod var onu çalıştırdığınızda düzelecektir.
+
+
