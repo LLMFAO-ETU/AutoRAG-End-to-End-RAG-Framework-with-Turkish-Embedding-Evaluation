@@ -7,6 +7,7 @@ qdrant-client>=1.6.0
 pypdf>=3.0.0
 python-docx>=0.8.11
 nltk>=3.8.1
-unstructured>=0.7.6
-huggingface-hub>=0.14.1
-bitsandbytes-cuda117
+huggingface-hub
+unstructured[all-docs]
+spacy>=3.8.0
+stanza
