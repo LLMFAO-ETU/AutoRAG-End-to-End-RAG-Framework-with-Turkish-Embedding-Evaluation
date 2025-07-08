@@ -11,3 +11,4 @@ huggingface-hub
 unstructured[all-docs]
 spacy>=3.8.0
 stanza
+tqdm
