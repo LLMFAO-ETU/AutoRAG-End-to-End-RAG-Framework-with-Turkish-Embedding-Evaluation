@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    restart: unless-stopped
+
+  autorag:
+    build: .
+    container_name: autorag
+    depends_on:
+      - ollama
+    volumes:
+      - ./data:/data
+    environment:
+      - OLLAMA_API=http://ollama:11434
+    entrypoint: ["python", "main.py"]
+
+volumes:
+  ollama_models:
