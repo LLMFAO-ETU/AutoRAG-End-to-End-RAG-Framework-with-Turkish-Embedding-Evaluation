@@ -21,3 +21,6 @@ tqdm==4.66.2
 
 # HTTP istekleri (Ollama için)
 requests==2.31.0
+
+# Frontend için Gradio
+gradio==5.38.0
