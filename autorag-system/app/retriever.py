@@ -1,15 +1,14 @@
 from app.embedding import get_embedder
-from app.config import COLLECTION_NAME
 
-def retrieve_top_k(query: str, qdrant_client, k: int = 5):
+def retrieve_top_k(query: str, qdrant_client, k: int, model_name:str, collection_name: str):
     """
     Verilen sorgu için Qdrant vektör veri tabanından en benzer k chunk'ı döndürür.
     """
-    embed_model = get_embedder()
+    embed_model = get_embedder(model_name)
     q_emb = embed_model.encode([query], convert_to_numpy=True)[0]
 
     search_result = qdrant_client.search(
-        collection_name=COLLECTION_NAME,
+        collection_name=collection_name,
         query_vector=q_emb.tolist(),
         limit=k,
         with_payload=True

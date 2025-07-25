@@ -5,19 +5,9 @@ def batch_create_pre_segments(
     all_documents: dict, 
     stanza_nlp_model,
     pre_segment_max_chars: int = 600,
-    pre_segment_max_sentences: int = 5
+    pre_segment_max_sentences: int = 6
 ):
-    """
-    Tüm belgeleri toplu halde işleyerek ön-segmentleri oluşturan optimize edilmiş fonksiyon.
-
-    Args:
-        all_documents (dict): { "path/to/doc": "document content", ... } formatında sözlük.
-        stanza_nlp_model: Başlatılmış Stanza pipeline nesnesi.
-        ... (diğer parametreler)
-
-    Returns:
-        list: [{'source': path, 'text': segment}, ...] formatında ön-segmentlerin listesi.
-    """
+   
     print("\n[INFO] Tüm belgeler toplu olarak işleniyor.")
     print("[INFO] Bu işlem belgelerin toplam boyutuna göre birkaç dakika sürebilir. Lütfen bekleyin...")
     # Belgelerin yollarını ve içeriklerini ayrı listelere al
@@ -25,11 +15,9 @@ def batch_create_pre_segments(
     doc_texts = list(all_documents.values())
 
     # 1. Stanza'yı tüm metinler üzerinde BATCH modunda çalıştır.
-    #    Bu, asıl performans kazancının geldiği yerdir.
     processed_docs = stanza_nlp_model.bulk_process(doc_texts)
     
     # 2. İşlenmiş belgelerden ön-segmentleri çıkar.
-    #    Bu döngü artık çok hızlı çalışacak çünkü asıl NLP işi bitti.
     all_pre_segments_with_source = []
     
     # tqdm'i buraya taşıdık, böylece ilerleme daha anlamlı olur.
@@ -66,9 +54,9 @@ def batch_create_pre_segments(
 def finalize_chunks_from_pre_segments(
     pre_segments,
     pre_segment_embeddings,
-    similarity_threshold: float = 0.50,
+    similarity_threshold: float = 0.40,
     final_chunk_min_pre_segments: int = 1,
-    final_chunk_max_pre_segments: int = 5,
+    final_chunk_max_pre_segments: int = 6, # final chunk'ın yaklaşık 1020 token aralığı civarında olmasını sağlar.
 ):
     if not pre_segments:
         return []

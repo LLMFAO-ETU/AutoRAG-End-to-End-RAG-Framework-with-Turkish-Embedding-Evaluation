@@ -67,10 +67,16 @@ def process_file(path, use_unstructured_primarily):
 
 
 def load_documents(source_path, use_unstructured_primarily=False):
-    print("[DEBUG] load_documents fonksiyonuna girildi.")
     docs = {}
     supported_extensions = (".pdf", ".docx", ".txt")
 
+    if os.path.isfile(source_path) and source_path.lower().endswith(supported_extensions):
+        
+        content = process_file(source_path, use_unstructured_primarily)
+        if content:
+            docs[source_path] = content
+        return docs
+    
     if os.path.isdir(source_path):
         for path in glob.glob(os.path.join(source_path, "**", "*"), recursive=True):
             if os.path.isfile(path) and path.lower().endswith(supported_extensions):

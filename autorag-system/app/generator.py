@@ -3,7 +3,7 @@ import os
 from app.retriever import retrieve_top_k
 from app.qdrant_handler import connect_qdrant
 
-def ollama_generate(prompt, model="gemma:2b", max_tokens=1024, temperature=0.6):
+def ollama_generate(prompt, model, max_tokens=1024, temperature=0.6):
 
     api_url = os.getenv("OLLAMA_API", "http://localhost:11434") + "/api/generate"
 
@@ -41,12 +41,13 @@ def ollama_generate(prompt, model="gemma:2b", max_tokens=1024, temperature=0.6):
         return "[HATA: BEKLENMEDİK İSTİSNA]"
 
 
-def rag_answer(query: str):
+def rag_answer(query: str, k: int, model: str, embed_model: str, collection_name: str):
+    
     print("\n>> Qdrant bağlantısı kuruluyor...")
     qdrant_client = connect_qdrant()
 
     print(">> Top-K retrieve ediliyor...")
-    results = retrieve_top_k(query, qdrant_client, k=5)
+    results = retrieve_top_k(query, qdrant_client, k, embed_model, collection_name)
 
     if not results:
         print("Qdrant sonuç döndürmedi.")
@@ -59,14 +60,15 @@ def rag_answer(query: str):
     )
 
     prompt = (
-        "Sen bir Türkçe NLP uzmanısın."
+        "Sen bir Türkçe NLP uzmanısın. Lütfen cevabını sadece Türkçe olarak ver."
         f"Soru: {query}\n\n"
         "Yukarıdaki soruyu, aşağıda verilen kaynakları kullanarak yanıtla. Sadece kaynaklarda geçen bilgileri kullan.\n\n"
         f"Kaynaklar:\n{sources_text}\n\n"
         "Yanıt:" 
     )
 
-    answer = ollama_generate(prompt)
+    answer = ollama_generate(prompt,model)
 
     print(">> Yanıt alındı.")
     return answer
+    
