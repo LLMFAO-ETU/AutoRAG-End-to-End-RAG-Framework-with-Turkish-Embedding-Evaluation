@@ -4,7 +4,6 @@ import sys
 import traceback
 import os
 from app.pipeline import autorag_process
-from app.config import EMBED_MODEL_NAME
 
 
 # --- CLI Modu ---
@@ -12,10 +11,21 @@ def cli_main():
     parser = argparse.ArgumentParser(description="AutoRAG - Terminal Kullanımı")
     parser.add_argument("--file", required=True, help=".zip dosyasının yolu")
     parser.add_argument("--query", required=True, help="Sorulacak soru")
+    parser.add_argument("--embed", default="sentence-transformers/distiluse-base-multilingual-cased-v1", help="Embedding modeli")
+    parser.add_argument("--llm", default="mistral:instruct", help="LLM modeli")
+    parser.add_argument("--topk", type=int, default=3, help="Top-K chunk sayısı")
+
     args = parser.parse_args()
 
     print("AutoRAG başlatılıyor...\n")
-    answer = autorag_process(args.file, args.query)
+    answer = autorag_process(
+        zip_file_path=args.file,
+        question=args.query,
+        top_k_size=args.topk,
+        embedding_model=args.embed,
+        llm_model=args.llm,
+        collection_name=os.path.splitext(os.path.basename(args.file))[0]
+    )
     print("Yanıt:\n", answer)
 
 
@@ -92,7 +102,6 @@ def gui_main():
     print("Enter this link to open:",url)
     demo.launch(server_name="0.0.0.0", server_port=7860)
     
-
 
 # --- Giriş noktası ---
 if __name__ == "__main__":
