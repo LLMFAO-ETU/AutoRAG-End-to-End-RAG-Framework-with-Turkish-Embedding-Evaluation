@@ -1,4 +1,4 @@
-# 🧠 AutoRAG — Belge Tabanlı Cevaplama Sistemi (Docker + GUI Sürümü)
+# 🧠 AutoRAG — Belge Tabanlı Cevaplama Sistemi (Docker + GUI )
 
 **AutoRAG**, `.pdf`, `.docx`, `.txt`, `.md` ve `.zip` gibi dosyaları işleyerek anlamlı parçalara bölen, embedding’lerini çıkaran, Qdrant vektör veritabanına kaydeden ve Ollama LLM API üzerinden Türkçe sorulara doğru ve kaynaklı cevaplar veren modern bir **Retrieval-Augmented Generation (RAG)** sistemidir.
 
