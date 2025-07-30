@@ -24,7 +24,7 @@ services:
       - "11434:11434"
     volumes:
       - ollama_storage:/root/.ollama
-    tty: true  # Ollama'nın terminale bağlanabilmesi için (opsiyonel)
+    tty: true
 
 volumes:
   qdrant_storage:
