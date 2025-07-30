@@ -1,7 +1,35 @@
+# 🧠 AutoRAG — Belge Tabanlı Cevaplama Sistemi (Docker + GUI Sürümü)
 
-# 🧠 AutoRAG — Belge Tabanlı Cevaplama Sistemi (Docker Sürümü)
+**AutoRAG**, `.pdf`, `.docx`, `.txt`, `.md` ve `.zip` gibi dosyaları işleyerek anlamlı parçalara bölen, embedding’lerini çıkaran, Qdrant vektör veritabanına kaydeden ve Ollama LLM API üzerinden Türkçe sorulara doğru ve kaynaklı cevaplar veren modern bir **Retrieval-Augmented Generation (RAG)** sistemidir.
 
-AutoRAG, `.pdf`, `.docx` ve `.txt` dosyalarını işleyerek anlamlı parçalara bölen, embedding’lerini çıkaran, Qdrant vektör veritabanına kaydeden ve Ollama LLM API ile Türkçe sorulara doğru ve kaynaklı cevaplar veren modern bir Retrieval-Augmented Generation (RAG) sistemidir.
+Yeni sürümle birlikte artık kullanıcı dostu **web arayüzü (GUI)** üzerinden tüm işlemleri gerçekleştirebilirsiniz!
+
+---
+
+## 🔍 Nasıl Çalışır?
+
+1. Yüklenen dosya (tekil veya `.zip`) açılır, `.pdf`, `.docx`, `.txt`, `.md` belgeler ayrıştırılır.
+2. Cümlelere ayrılma işlemi `Stanza` ile yapılır.
+3. Segmentler, seçilen **embedding modeli** ile vektörleştirilir.
+4. Bu vektörler **Qdrant** veritabanına kaydedilir.
+5. Kullanıcının sorusu embedlenir, Qdrant’tan en yakın parçalar getirilir.
+6. Bu parçalar prompt’a gömülerek seçilen **LLM modeli** ile cevap üretilir.
+
+---
+
+## 🛠️ Teknik Detaylar
+
+| Bileşen                  | Teknoloji / Açıklama |
+|--------------------------|----------------------|
+| **Dil Modelleri (LLM)**  | `mistral:instruct`, `gemma:2b`, `Phi-2` *(Ollama ile local çalışır)* |
+| **Embedding Modelleri**  | `sentence-transformers/distiluse-base-multilingual-cased-v1`<br>`sentence-transformers/distiluse-base-multilingual-cased-v2`<br>`Trendyol/TY-ecomm-embed-multilingual-base-v1.2.0` |
+| **Parserlar**            | `unstructured`, `stanza`, `python-docx`, `pypdf` |
+| **Vektör Veritabanı**    | `Qdrant` |
+| **Arayüz**               | `Gradio` tabanlı web arayüz (localhost:7860) |
+| **Docker Ortamı**        | `docker-compose` ile izole ve hızlı kurulum |
+
+**Not:**  
+Kullanılan dil modelleri (LLM), Türkçe dilinde yeterli performans sergileyen, düşük parametreli ve localde çalıştırılabilir modellerden seçilmiştir. Büyük ve daha başarılı modeller yerine bu seçenekler tercih edilmiştir çünkü hedef, sistemin donanım dostu, hızlı ve erişilebilir olmasıdır.
 
 ---
 
@@ -9,7 +37,7 @@ AutoRAG, `.pdf`, `.docx` ve `.txt` dosyalarını işleyerek anlamlı parçalara 
 
 ### 🧩 1. Bu klasörü bilgisayarınıza indirin
 
-GitHub’dan veya doğrudan `.zip` olarak edindiğiniz dosyaları bir klasöre çıkarın. Örnek yapı şöyle olmalıdır:
+GitHub’dan veya `.zip` olarak projeyi indirip çıkartın. Klasör yapısı şu şekilde olmalıdır:
 
 ```
 autorag-system/
@@ -20,46 +48,48 @@ autorag-system/
 ├── app/
 │   ├── *.py
 └── data/
-    └── belgeler.zip   ← belgelerinizi buraya koyacaksınız
+    └── belgeler.zip   ← belgelerinizi buraya koyabilirsiniz (isteğe bağlı)
 ```
 
 ### 🐳 2. Docker image’ini oluşturun
 
-Terminali bu klasörde açın ve aşağıdaki komutla Docker image’ini oluşturun:
+Terminali bu klasörde açın ve aşağıdaki komutu çalıştırarak Docker image’ini oluşturun:
 
 ```bash
 docker-compose build
 ```
 
-> Bu işlem ilk seferde birkaç dakika sürebilir. Gerekli Python kütüphaneleri indirilecektir.
+> Bu işlem ilk seferde uzun sürebilir. Gerekli Python kütüphaneleri indirilecektir.
 
-### ⚡ 3. Sistemi çalıştırın
+---
 
-Belgelerinizi `data/` klasörüne `.zip` formatında koyduktan sonra şu komutu çalıştırın:
+## 🚀 Sistemi Başlatma (GUI Modu)
+
+Artık tüm işlemler tarayıcı tabanlı grafiksel arayüz (GUI) üzerinden yapılabilmektedir.
+
+### ✅ Kullanıcıya sağlanan seçenekler:
+
+- 📄 Belge yükleme (.pdf, .docx, .txt, .md, .zip)
+- 🔍 Soru sorma
+- 💡 Embedding modeli seçimi
+- 🧠 LLM modeli seçimi
+- 🔢 Top-K chunk sayısı ayarı
+
+### Başlatmak için:
 
 ```bash
-docker-compose run --rm autorag --file /data/belgeler.zip --query "Belgelerinizle ilgili soruyu buraya yazın"
+docker-compose run --rm autorag
 ```
 
-✅ Örnek:
+Ardından tarayıcınızda şu adresi açın:
 
-```bash
-docker-compose run --rm autorag --file /data/ataturk.zip --query "Atatürk'ün ekonomi politikaları nasıldı?"
+```
+http://localhost:7860
 ```
 
+---
 
-### 🧼 4. Kullanımı bitirdikten sonra sistem servislerini durdurun
-
-```bash
-docker-compose down
-```
-
-## 💡 Yardımcı Notlar
-
-- Docker Desktop kurulu değilse: [https://www.docker.com/products/docker-desktop/](https://www.docker.com/products/docker-desktop/)
-- `docker-compose` komutu tanınmıyorsa, `docker compose` (boşluklu) şeklinde deneyebilirsiniz.
-
-## 🧩 Tam Komutlar Zinciri (Kopyala-yapıştır için)
+## 🧾 Tam Komutlar Zinciri (Kopyala-Yapıştır için)
 
 ```bash
 # 1. Projeyi bir klasöre çıkarın
@@ -68,46 +98,26 @@ cd autorag-system
 # 2. Docker image oluştur
 docker-compose build
 
-# 3. Belgeleri data/ içine koy
+# 3. (Opsiyonel) Belgeleri data/ klasörüne kopyalayın
 mv ~/Downloads/belgeler.zip ./data/
 
-# 4. Sistemi çalıştır
-docker-compose run --rm autorag --file /data/belgeler.zip --query "Belgelerin içeriğine dair sorunuz"
+# 4. Sistemi başlatın (GUI arayüzü için tarayıcınızda http://localhost:7860 adresini açın.)
+docker-compose run --rm autorag
 
-# 5. İşiniz bittiğinde durdur
+# 5. İşiniz bittiğinde sistemi kapatın
 docker-compose down
 ```
 
 ---
 
-## 🔍 Nasıl Çalışır?
-
-1. `.zip` dosyası açılır, `.pdf`, `.docx`, `.txt` dosyaları ayrıştırılır.
-2. Her doküman, `Stanza` ile cümlelere bölünerek anlamlı segmentlere ayrılır.
-3. Bu segmentler `sentence-transformers` ile embedding’e dönüştürülür.
-4. `Qdrant` vektör veritabanına kayıt edilir.
-5. Soru için embedding çıkarılır, Qdrant’tan en yakın parçalar alınır.
-6. Bu parçalar prompt’a eklenip `Ollama` üzerinden `gemma:2b` ile cevap alınır.
-
-## 🛠️ Teknik Detaylar
-
-| Bileşen       | Teknoloji                         |
-|---------------|-----------------------------------|
-| Dil modeli    | `gemma:2b` (via Ollama)          |
-| Embedding     | `distiluse-base-multilingual-cased-v1` |
-| Parser        | `unstructured`, `stanza`, `pypdf`, `python-docx` |
-| Vector DB     | Qdrant                           |
-| Docker Image  | AutoRAG (yerel build)            |
-
-## 🧪 Örnek Sorgular
+## 🧼 Kullanımı Bitirdikten Sonra
 
 ```bash
-docker-compose run --rm autorag --file /data/raporlar.zip --query "Dijital dönüşüm nedir?"
+docker-compose down
 ```
 
-```bash
-docker-compose run --rm autorag --file /data/tarih.zip --query "Kapitülasyonların kaldırılması ne zaman gerçekleşti?"
-```
+---
+
 
 ## 📬 İletişim
 
