@@ -35,7 +35,6 @@ def gui_main():
         if file is None or not question.strip():
             return "Lütfen geçerli bir dosya ve soru girin."
 
-
         try:
             return autorag_process(
                     zip_file_path=file.name,
@@ -43,7 +42,7 @@ def gui_main():
                     top_k_size=int(top_k_size),
                     embedding_model=embedding_model,
                     llm_model=llm_model,
-                    collection_name=os.path.splitext(os.path.basename(file.name))[0]
+                    collection_name = f"{os.path.splitext(os.path.basename(file.name))[0]}_{embedding_model.split('/')[-1]}"
             )
         except Exception as e:
             print("\n--- HATA: AutoRAG çalıştırılırken bir istisna oluştu ---")
@@ -64,9 +63,10 @@ def gui_main():
                 choices=[
                     "sentence-transformers/distiluse-base-multilingual-cased-v1",
                     "sentence-transformers/distiluse-base-multilingual-cased-v2",
+                    "Trendyol/TY-ecomm-embed-multilingual-base-v1.2.0"
                 ],
                 label="Embedding Modeli",
-                value="sentence-transformers/distiluse-base-multilingual-cased-v1"
+                value="Trendyol/TY-ecomm-embed-multilingual-base-v1.2.0"
             )
             llm_model = gr.Dropdown(
                 choices=[
