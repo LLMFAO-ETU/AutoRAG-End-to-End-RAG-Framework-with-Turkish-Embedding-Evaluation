@@ -1,4 +1,4 @@
-# 🧠 AutoRAG — Belge Tabanlı Cevaplama Sistemi (Docker + GUI Sürümü)
+# 🧠 AutoRAG — Belge Tabanlı Cevaplama Sistemi (Docker + GUI )
 
 **AutoRAG**, `.pdf`, `.docx`, `.txt`, `.md` ve `.zip` gibi dosyaları işleyerek anlamlı parçalara bölen, embedding’lerini çıkaran, Qdrant vektör veritabanına kaydeden ve Ollama LLM API üzerinden Türkçe sorulara doğru ve kaynaklı cevaplar veren modern bir **Retrieval-Augmented Generation (RAG)** sistemidir.
 
@@ -35,7 +35,7 @@ Kullanılan dil modelleri (LLM), Türkçe dilinde yeterli performans sergileyen,
 
 ## ⚙️ Kurulum ve Çalıştırma Adımları
 
-### 🧩 1. Bu klasörü bilgisayarınıza indirin
+### Proje Yapısı
 
 GitHub’dan veya `.zip` olarak projeyi indirip çıkartın. Klasör yapısı şu şekilde olmalıdır:
 
@@ -51,58 +51,27 @@ autorag-system/
     └── belgeler.zip   ← belgelerinizi buraya koyabilirsiniz (isteğe bağlı)
 ```
 
-### 🐳 2. Docker image’ini oluşturun
-
-Terminali bu klasörde açın ve aşağıdaki komutu çalıştırarak Docker image’ini oluşturun:
-
-```bash
-docker-compose build
-```
-
-> Bu işlem ilk seferde uzun sürebilir. Gerekli Python kütüphaneleri indirilecektir.
+**Not:**  
+`data/` klasörüne belge koymak, terminalde `--file` argümanını kullanacak CLI kullanıcıları içindir. GUI arayüzü kullananlar belgeyi doğrudan arayüzden yükleyebilir, klasöre koymak zorunda değildir.
 
 ---
 
-## 🚀 Sistemi Başlatma (GUI Modu)
-
-Artık tüm işlemler tarayıcı tabanlı grafiksel arayüz (GUI) üzerinden yapılabilmektedir.
-
-### ✅ Kullanıcıya sağlanan seçenekler:
-
-- 📄 Belge yükleme (.pdf, .docx, .txt, .md, .zip)
-- 🔍 Soru sorma
-- 💡 Embedding modeli seçimi
-- 🧠 LLM modeli seçimi
-- 🔢 Top-K chunk sayısı ayarı
-
-### Başlatmak için:
-
-```bash
-docker-compose run --rm autorag
-```
-
-Ardından tarayıcınızda şu adresi açın:
-
-```
-http://localhost:7860
-```
-
----
-
-## 🧾 Tam Komutlar Zinciri (Kopyala-Yapıştır için)
+## 🧾 Tam Kurulum ve Çalıştırma Komutları (GUI Modu)
 
 ```bash
 # 1. Projeyi bir klasöre çıkarın
 cd autorag-system
 
-# 2. Docker image oluştur
+# 2. Docker image oluştur > Bu işlem ilk seferde uzun sürebilir. Gerekli Python kütüphaneleri indirilecektir.
 docker-compose build
 
 # 3. (Opsiyonel) Belgeleri data/ klasörüne kopyalayın
 mv ~/Downloads/belgeler.zip ./data/
 
-# 4. Sistemi başlatın (GUI arayüzü için tarayıcınızda http://localhost:7860 adresini açın.)
+# 4. Sistemi başlatın
 docker-compose run --rm autorag
+
+# Tarayıcınızda http://localhost:7860 adresini manuel olarak açın.
 
 # 5. İşiniz bittiğinde sistemi kapatın
 docker-compose down
@@ -110,14 +79,32 @@ docker-compose down
 
 ---
 
-## 🧼 Kullanımı Bitirdikten Sonra
+## 🖥️ Alternatif: Terminal (CLI) Modu
+
+AutoRAG, GUI dışında terminal üzerinden çalıştırılabilir bir komut satırı arayüzü de sunar. Bu mod, daha hızlı sorgular yapmak veya GUI arayüzü olmadan sistemle etkileşime geçmek isteyen kullanıcılar için uygundur.
+
+### 🔹 Zorunlu argümanlar:
+- `--file` : `.zip` dosyasının yolu
+- `--query` : sorulacak metin
+
+### 🔸 İsteğe bağlı argümanlar:
+- `--embed` : embedding modeli adı *(varsayılan: `sentence-transformers/Trendyol/TY-ecomm-embed-multilingual-base-v1.2.0`)*
+- `--llm` : LLM modeli adı *(varsayılan: `mistral:instruct`)*
+- `--topk` : kaç chunk alınacağı *(varsayılan: `8`)*
+
+### ✅ Önerilen kullanım:
 
 ```bash
-docker-compose down
+docker-compose run --rm autorag   --file /data/ataturk.zip   --query "Atatürk'ün ekonomi politikaları nasıldı?"
+```
+
+### 🔧 Gelişmiş kullanım:
+
+```bash
+docker-compose run --rm autorag   --file /data/ataturk.zip   --query "Atatürk'ün ekonomi politikaları nasıldı?"   --embed distiluse-base-multilingual-cased-v1   --llm gemma:2b   --topk 5
 ```
 
 ---
-
 
 ## 📬 İletişim
 
