@@ -11,9 +11,9 @@ def cli_main():
     parser = argparse.ArgumentParser(description="AutoRAG - Terminal Kullanımı")
     parser.add_argument("--file", required=True, help=".zip dosyasının yolu")
     parser.add_argument("--query", required=True, help="Sorulacak soru")
-    parser.add_argument("--embed", default="sentence-transformers/distiluse-base-multilingual-cased-v1", help="Embedding modeli")
+    parser.add_argument("--embed", default="sentence-transformers/Trendyol/TY-ecomm-embed-multilingual-base-v1.2.0", help="Embedding modeli")
     parser.add_argument("--llm", default="mistral:instruct", help="LLM modeli")
-    parser.add_argument("--topk", type=int, default=3, help="Top-K chunk sayısı")
+    parser.add_argument("--topk", type=int, default=8, help="Top-K chunk sayısı")
 
     args = parser.parse_args()
 
