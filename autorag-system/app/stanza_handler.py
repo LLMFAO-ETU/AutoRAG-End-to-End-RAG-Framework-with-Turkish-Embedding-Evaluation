@@ -11,12 +11,12 @@ def initialize_stanza_pipeline (lang="tr"):
 
     if not os.path.exists(tokenizer_file):
         print(f"[INFO] Stanza Türkçe modeli indiriliyor: {default_dir}")
-        stanza.download(lang)
+        stanza.download(lang, processors="tokenize")
     else:
         print(f"[INFO] Stanza Türkçe modeli zaten mevcut: {default_dir}")
 
     try:
-        pipeline = stanza.Pipeline(lang=lang)
+        pipeline = stanza.Pipeline(lang=lang, processors="tokenize", use_gpu=True, tokenize_pretokenized=False, verbose=False)
         _ = pipeline("Test cümlesi.")  # zorunlu preload
         return pipeline
     except Exception as e:

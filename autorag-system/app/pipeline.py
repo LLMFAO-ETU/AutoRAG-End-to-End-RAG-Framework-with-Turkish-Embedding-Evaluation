@@ -14,12 +14,12 @@ def autorag_process(zip_file_path: str, question: str, top_k_size: int, embeddin
     nlp_tr = initialize_stanza_pipeline("tr")
 
     # 2. Belgeleri yükle
-    all_documents = load_documents(zip_file_path, use_unstructured_primarily=True)
+    all_documents = load_documents(zip_file_path, use_unstructured_primarily=False)
 
     # 3. Pre-segment + embed
     all_pre_segments = batch_create_pre_segments(all_documents, nlp_tr)
     texts = [item['text'] for item in all_pre_segments]
-    embeddings = embed_model.encode(texts, show_progress_bar=True, convert_to_numpy=True)
+    embeddings = embed_model.encode(texts, batch_size=128, show_progress_bar=True, convert_to_numpy=True)
 
     for i, item in enumerate(all_pre_segments):
         item['embedding'] = embeddings[i]
@@ -40,7 +40,7 @@ def autorag_process(zip_file_path: str, question: str, top_k_size: int, embeddin
                     "original_text": chunk
                 })
 
-    final_embeddings = embed_model.encode(final_chunks_text, show_progress_bar=True, convert_to_numpy=True)
+    final_embeddings = embed_model.encode(final_chunks_text, batch_size=128, show_progress_bar=True, convert_to_numpy=True)
 
     # 5. Qdrant'a yükle
     client = connect_qdrant()

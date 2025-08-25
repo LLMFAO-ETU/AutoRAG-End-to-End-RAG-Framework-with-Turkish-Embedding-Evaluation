@@ -4,8 +4,8 @@ from tqdm import tqdm
 def batch_create_pre_segments(
     all_documents: dict, 
     stanza_nlp_model,
-    pre_segment_max_chars: int = 600,
-    pre_segment_max_sentences: int = 6
+    pre_segment_max_chars: int = 1000,
+    pre_segment_max_sentences: int = 8
 ):
    
     print("\n[INFO] Tüm belgeler toplu olarak işleniyor.")

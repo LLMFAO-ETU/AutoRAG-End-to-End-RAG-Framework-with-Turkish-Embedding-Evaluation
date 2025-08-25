@@ -16,24 +16,20 @@ def connect_qdrant():
 
 def recreate_collection(qdrant_client, collection_name, vector_size):
     """
-    Var olan koleksiyonu siler ve yeniden oluşturur.
+    Varsa dokunma, yoksa oluştur.
     """
     try:
-        qdrant_client.delete_collection(collection_name=collection_name)
-        print(f"Koleksiyon '{collection_name}' silindi.")
+        qdrant_client.get_collection(collection_name=collection_name)
+        return
     except Exception:
-        print(f"Koleksiyon '{collection_name}' silinemedi veya zaten yoktu.")
+        pass
 
     qdrant_client.create_collection(
         collection_name=collection_name,
-        vectors_config=VectorParams(
-            size=vector_size,
-            distance=Distance.COSINE
-        )
+        vectors_config=VectorParams(size=vector_size, distance=Distance.COSINE)
     )
-    print(f"Koleksiyon '{collection_name}' yeniden oluşturuldu.")
 
-def upload_points_to_qdrant(qdrant_client, collection_name, embeddings, metadata_list, batch_size=100):
+def upload_points_to_qdrant(qdrant_client, collection_name, embeddings, metadata_list, batch_size=1024):
     """
     Embedding ve metadata verilerini Qdrant'a yükler.
     """
