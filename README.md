@@ -105,6 +105,48 @@ docker-compose run --rm autorag   --file /data/ataturk.zip   --query "Atatürk'�
 ```
 
 ---
+## 📊 Retrieval Performance Metrics
+### Longest Wikipedia Segment Selection
+| Metric  | Embedding Model                                  | Top-k = 3 | Top-k = 5 | Top-k = 8 | Top-k = 10 |
+| ------- | ------------------------------------------------ | --------- | --------- | --------- | ---------- |
+| Recall  | distiluse-base-multilingual-cased-v1             | 0.3111    | 0.3555    | 0.4222    | 0.4666     |
+| Recall  | distiluse-base-multilingual-cased-v2             | 0.2889    | 0.3333    | 0.4222    | 0.4444     |
+| Recall  | Trendyol/TY-ecomm-embed-multilingual-base-v1.2.0 | 0.3667    | 0.4333    | 0.5000    | 0.5333     |
+| EIR     | distiluse-base-multilingual-cased-v1             | 0.0098    | 0.0064    | 0.0061    | 0.0045     |
+| EIR     | distiluse-base-multilingual-cased-v2             | 0.0085    | 0.0067    | 0.0051    | 0.0030     |
+| EIR     | Trendyol/TY-ecomm-embed-multilingual-base-v1.2.0 | 0.0114    | 0.0078    | 0.0058    | 0.0049     |
+| nDCG\@k | distiluse-base-multilingual-cased-v1             | 0.2356    | 0.2452    | 0.2679    | 0.2825     |
+| nDCG\@k | distiluse-base-multilingual-cased-v2             | 0.1972    | 0.2068    | 0.2374    | 0.2431     |
+| nDCG\@k | Trendyol/TY-ecomm-embed-multilingual-base-v1.2.0 | 0.3265    | 0.3640    | 0.3827    | 0.3827     |
+
+### Random Wikipedia Segment Selection
+| Metric  | Embedding Model                                  | Top-k = 3 | Top-k = 5 | Top-k = 8 | Top-k = 10 |
+| ------- | ------------------------------------------------ | --------- | --------- | --------- | ---------- |
+| Recall  | distiluse-base-multilingual-cased-v1             | 0.5111    | 0.5556    | 0.6000    | 0.6222     |
+| Recall  | distiluse-base-multilingual-cased-v2             | 0.4222    | 0.4667    | 0.4667    | 0.4889     |
+| Recall  | Trendyol/TY-ecomm-embed-multilingual-base-v1.2.0 | 0.6333    | 0.7333    | 0.7333    | 0.7667     |
+| EIR     | distiluse-base-multilingual-cased-v1             | 0.0464    | 0.0195    | 0.0129    | 0.0107     |
+| EIR     | distiluse-base-multilingual-cased-v2             | 0.0275    | 0.0183    | 0.0113    | 0.0059     |
+| EIR     | Trendyol/TY-ecomm-embed-multilingual-base-v1.2.0 | 0.0368    | 0.0235    | 0.0136    | 0.0090     |
+| nDCG\@k | distiluse-base-multilingual-cased-v1             | 0.4399    | 0.4543    | 0.4693    | 0.4760     |
+| nDCG\@k | distiluse-base-multilingual-cased-v2             | 0.3524    | 0.3715    | 0.3764    | 0.3826     |
+| nDCG\@k | Trendyol/TY-ecomm-embed-multilingual-base-v1.2.0 | 0.5524    | 0.5913    | 0.5978    | 0.6161     |
+
+
+### Shortest Wikipedia Segment Selection
+| Metric  | Embedding Model                                  | Top-k = 3 | Top-k = 5 | Top-k = 8 | Top-k = 10 |
+| ------- | ------------------------------------------------ | --------- | --------- | --------- | ---------- |
+| Recall  | distiluse-base-multilingual-cased-v1             | 0.9286    | 0.9286    | 0.9286    | 0.9286     |
+| Recall  | distiluse-base-multilingual-cased-v2             | 0.8571    | 0.8571    | 0.8571    | 0.9286     |
+| Recall  | Trendyol/TY-ecomm-embed-multilingual-base-v1.2.0 | 1.0000    | 1.0000    | 1.0000    | 1.0000     |
+| EIR     | distiluse-base-multilingual-cased-v1             | 0.1652    | 0.0902    | 0.0502    | 0.0388     |
+| EIR     | distiluse-base-multilingual-cased-v2             | 0.1802    | 0.0884    | 0.0400    | 0.0314     |
+| EIR     | Trendyol/TY-ecomm-embed-multilingual-base-v1.2.0 | 0.1244    | 0.0681    | 0.0337    | 0.0230     |
+| nDCG\@k | distiluse-base-multilingual-cased-v1             | 0.8571    | 0.8571    | 0.8571    | 0.8571     |
+| nDCG\@k | distiluse-base-multilingual-cased-v2             | 0.7687    | 0.7687    | 0.7687    | 0.7902     |
+| nDCG\@k | Trendyol/TY-ecomm-embed-multilingual-base-v1.2.0 | 1.0000    | 1.0000    | 1.0000    | 1.0000     |
+
+---
 
 ## 📬 İletişim
 
